@@ -1,0 +1,15 @@
+jsonpath
+requests
+PyMySQL
+PyExecJS
+jsonpath_rw_ext
+arrow
+schedule
+beautifulsoup4
+imapclient
+json_tools
+interval
+pytz
+sshtunnel
+xlrd
+sqlparse

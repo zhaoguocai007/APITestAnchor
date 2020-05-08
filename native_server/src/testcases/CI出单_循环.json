@@ -1,0 +1,47 @@
+{
+	"name": "CI出正常保单",
+	"data_bind": "",
+	"priority": "P3",
+	"template": "模板id",
+	"execution_times": 1000,
+	"global_conf": {
+		"credentials":"bb7b0cd5-543f-4ab0-a9a1-47b16dd40011"
+	},
+	"setup": "",
+	"tear_down": "",
+	"steps": [
+
+		{
+			"steps_id": "1001",
+			"steps_name": "CI第1次trip出单",
+			"precondition": [
+				{"condition": ["set_global","pre1",["pre_issue",["get_global_conf","credentials"]]]}
+			],
+			"meta_data": {
+				"host": ["get_host", "edge"],
+				"url": "/mall/api/callback/sgci/issue",
+				"header": {
+					"Content-Type": "application/json",
+                    "Partner-User-ID": ["get_json_value_by_path",["get_global_conf","pre1"],"$.partnerUserId"],
+					"Authorization":["get_json_value_by_path",["get_global_conf","pre1"],"$.authorization"],
+					"Nonce":["get_json_value_by_path",["get_global_conf","pre1"],"$.nonce"]
+				},
+				"method": "POST",
+				"data": {
+					"txId": ["letter_number","8"],
+					"completeTime":["now_time","ctime"]
+
+				}
+			},
+			"validations": [
+				{
+					"validation": ["equal", ["get_http_code"], 200]
+				},
+				{
+					"validation": ["equal", ["get_json_value_by_path", ["get_response_json"], "$.code"], 0]
+				}
+			],
+			"clean_up": []
+		}
+	]
+}
